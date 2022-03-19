@@ -1,4 +1,5 @@
 ﻿using Serilog;
+using Serilog.Sinks.SystemConsole.Themes;
 using Serilog.Templates;
 
 namespace Excel.Editor
@@ -17,8 +18,7 @@ namespace Excel.Editor
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .WriteTo.Console(new ExpressionTemplate(
-                    "[{@t:yyy-MM-ddTHH:mm:ss} {@l:w4}] {@m}\n{@x}"))
+                .WriteTo.Console(outputTemplate: "[{Timestamp:yyy-MM-ddTHH:mm:ss} {Level:w4}] {Message:lj}{NewLine}{Exception}", theme: AnsiConsoleTheme.Code)
                 .CreateLogger();
 
             var editor = new ExcelEditor();

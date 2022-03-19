@@ -129,14 +129,26 @@ public class ExcelEditor
                 }
             }
 
-            using (var memoryStream = new MemoryStream()) //creating memoryStream
+            try
             {
-                xssWorkbook.Write(memoryStream);
-                using (var file = new FileStream("new-" + template.ExcelFile, FileMode.Create, FileAccess.Write))
-                {
-                    memoryStream.WriteTo(file);
-                    memoryStream.Close();
-                }
+                Save(template, xssWorkbook);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message);
+            }
+        }
+    }
+
+    private static void Save(Template template, XSSFWorkbook xssWorkbook)
+    {
+        using (var memoryStream = new MemoryStream()) //creating memoryStream
+        {
+            xssWorkbook.Write(memoryStream);
+            using (var file = new FileStream("new-" + template.ExcelFile, FileMode.Create, FileAccess.Write))
+            {
+                memoryStream.WriteTo(file);
+                memoryStream.Close();
             }
         }
     }
@@ -187,7 +199,7 @@ public class ExcelEditor
 
                 if (func(cell.ToString()))
                 {
-                    Log.Information("found \"" + cmd1.Substring(0, 100) + "\"");
+                    Log.Information("found \"" + cmd1.Substring(0, Math.Min(100, cmd1.Length)) + "\"");
                     return (r, col);
                 }
             }
@@ -211,7 +223,7 @@ public class ExcelEditor
 
             if (cell.ToString() == cmd1)
             {
-                Log.Information("found \"" + cmd1.Substring(0, 100) + "\"");
+                Log.Information("found \"" + cmd1.Substring(0, Math.Min(100, cmd1.Length)) + "\"");
                 return (r, column);
             }
         }
