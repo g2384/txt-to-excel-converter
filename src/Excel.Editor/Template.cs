@@ -37,6 +37,12 @@ public class Template
                 continue;
             }
 
+            if (l.StartsWith("output:"))
+            {
+                OutputFile = l.Split("output:")[1].Trim();
+                continue;
+            }
+
             if (l.StartsWith("fill:"))
             {
                 var ps = l.Split("fill:")[1];
@@ -67,6 +73,7 @@ public class Template
     }
 
     public string ExcelFile { get; set; }
+    public string OutputFile { get; set; }
     public bool UseTitle { get; set; }
     public string[] BlankColumns { get; set; }
     public IDictionary<string, string[]> Commands { get; set; } = new Dictionary<string, string[]>();

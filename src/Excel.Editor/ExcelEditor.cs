@@ -145,7 +145,7 @@ public class ExcelEditor
         using (var memoryStream = new MemoryStream()) //creating memoryStream
         {
             xssWorkbook.Write(memoryStream);
-            using (var file = new FileStream("new-" + template.ExcelFile, FileMode.Create, FileAccess.Write))
+            using (var file = new FileStream(template.OutputFile, FileMode.Create, FileAccess.Write))
             {
                 memoryStream.WriteTo(file);
                 memoryStream.Close();
@@ -160,6 +160,7 @@ public class ExcelEditor
         if (!string.IsNullOrWhiteSpace(text))
         {
             cell.SetCellValue(text);
+            Log.Information("added " + TrimText(text));
         }
 
         cell.CellStyle.VerticalAlignment = VerticalAlignment.Top;
@@ -181,6 +182,7 @@ public class ExcelEditor
         cell.SetCellValue(t);
 
         cell.CellStyle.WrapText = true;
+        Log.Information("appended " + TrimText(cmd3));
     }
 
     private static (int, int) GetMatchedCell(int lastRow, ISheet sheet, string cmd1, Func<string, bool> func)
@@ -199,14 +201,26 @@ public class ExcelEditor
 
                 if (func(cell.ToString()))
                 {
-                    Log.Information("found \"" + cmd1.Substring(0, Math.Min(100, cmd1.Length)) + "\"");
+                    Log.Information("found \"" + TrimText(cmd1) + "\"");
                     return (r, col);
                 }
             }
         }
 
-        Log.Error("failed to find \"" + cmd1.Substring(0, 100) + "\"");
+        Log.Error("failed to find \"" + TrimText(cmd1) + "\"");
         return (-1, -1);
+    }
+
+    private static string TrimText(string t)
+    {
+        if (t.Length < 100)
+        {
+            return t;
+        }
+        else
+        {
+            return t.Substring(0, 97) + "...";
+        }
     }
 
     private static (int, int) GetCellEquals(ISheet sheet, int column, int lastRow, string cmd1)
@@ -223,12 +237,12 @@ public class ExcelEditor
 
             if (cell.ToString() == cmd1)
             {
-                Log.Information("found \"" + cmd1.Substring(0, Math.Min(100, cmd1.Length)) + "\"");
+                Log.Information("found \"" + TrimText(cmd1) + "\"");
                 return (r, column);
             }
         }
 
-        Log.Error("failed to find \"" + cmd1.Substring(0, 100) + "\"");
+        Log.Error("failed to find \"" + TrimText(cmd1) + "\"");
         return (-1, -1);
     }
 
