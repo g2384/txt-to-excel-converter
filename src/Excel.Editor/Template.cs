@@ -20,6 +20,7 @@ public class Template
             }
 
             var l = line.Trim();
+            l = l.Split("#comment").First();
             if (header)
             {
                 if (l.StartsWith("file:"))

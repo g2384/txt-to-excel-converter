@@ -1,6 +1,5 @@
 ﻿using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
-using Serilog.Templates;
 
 namespace Excel.Editor
 {

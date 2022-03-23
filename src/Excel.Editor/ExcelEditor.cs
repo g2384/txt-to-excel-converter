@@ -20,6 +20,7 @@ public class ExcelEditor
             foreach (var c in template.Commands)
             {
                 var sheet = xssWorkbook.GetSheet(c.Key);
+                Log.Information($"Opened sheet {c.Key}");
                 var headerRow = sheet.GetRow(0);
                 var cells = headerRow.Cells;
                 var title = cells.Select(e => e.ToString()).ToList();
@@ -182,7 +183,7 @@ public class ExcelEditor
         cell.SetCellValue(t);
 
         cell.CellStyle.WrapText = true;
-        Log.Information("appended " + TrimText(cmd3));
+        Log.Information("appended " + TrimText(cmd3) + $" at ({cell.Address})");
     }
 
     private static (int, int) GetMatchedCell(int lastRow, ISheet sheet, string cmd1, Func<string, bool> func)
@@ -201,7 +202,7 @@ public class ExcelEditor
 
                 if (func(cell.ToString()))
                 {
-                    Log.Information("found \"" + TrimText(cmd1) + "\"");
+                    Log.Information("found \"" + TrimText(cmd1) + "\"" + $" at ({cell.Address})");
                     return (r, col);
                 }
             }
@@ -213,14 +214,13 @@ public class ExcelEditor
 
     private static string TrimText(string t)
     {
-        if (t.Length < 100)
+        const int len = 50;
+        if (t.Length < len)
         {
             return t;
         }
-        else
-        {
-            return t.Substring(0, 97) + "...";
-        }
+
+        return t.Substring(0, len - 3) + "...";
     }
 
     private static (int, int) GetCellEquals(ISheet sheet, int column, int lastRow, string cmd1)
@@ -237,7 +237,7 @@ public class ExcelEditor
 
             if (cell.ToString() == cmd1)
             {
-                Log.Information("found \"" + TrimText(cmd1) + "\"");
+                Log.Information("found \"" + TrimText(cmd1) + "\"" + $" at ({cell.Address})");
                 return (r, column);
             }
         }

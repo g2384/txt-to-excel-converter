@@ -31,6 +31,7 @@ add-b: add to B3
 |`output`|file path of the new excel file|
 |`params`|other parameters|
 |`fill`|specify blank columns, when `user-title` is set|
+|`---`|settings stop here, all lines below are not for settings|
 
 ### for `params`
 
@@ -51,3 +52,4 @@ all parameters in this section can be appended to `params:` line.
 |`add-l`|move to the left cell, and add text|
 |`add-b`|move to the bottom cell, and add text|
 |`add-t`|move to the up cell, and add text|
+|`#comment`|all words after this are comments, will be ignored|
