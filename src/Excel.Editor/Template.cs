@@ -11,6 +11,7 @@ public class Template
         var lines = File.ReadAllLines(file);
         var currentSheet = "";
         var currentCommands = new List<string>();
+        var header = true;
         foreach (var line in lines)
         {
             if (string.IsNullOrWhiteSpace(line))
@@ -19,36 +20,52 @@ public class Template
             }
 
             var l = line.Trim();
-            if (l.StartsWith("file:"))
+            if (header)
             {
-                ExcelFile = l.Split("file:")[1].Trim();
-                continue;
-            }
-
-            if (l.StartsWith("params:"))
-            {
-                var l1 = l.ToLowerInvariant();
-                var ps = l1.Split("params:")[1];
-                if(ps.Contains("use-title"))
+                if (l.StartsWith("file:"))
                 {
-                    UseTitle = true;
+                    ExcelFile = l.Split("file:")[1].Trim();
+                    if (!File.Exists(ExcelFile))
+                    {
+                        var fi = new FileInfo(file);
+                        var path = fi.Directory;
+                        ExcelFile = Path.Combine(path.FullName, ExcelFile);
+                    }
+
+                    continue;
                 }
 
-                continue;
-            }
+                if (l.StartsWith("params:"))
+                {
+                    var l1 = l.ToLowerInvariant();
+                    var ps = l1.Split("params:")[1];
+                    if (ps.Contains("use-title"))
+                    {
+                        UseTitle = true;
+                    }
 
-            if (l.StartsWith("output:"))
-            {
-                OutputFile = l.Split("output:")[1].Trim();
-                continue;
-            }
+                    continue;
+                }
 
-            if (l.StartsWith("fill:"))
-            {
-                var ps = l.Split("fill:")[1];
-                var p = ps.Split(",").Select(e => e.Trim());
-                BlankColumns = p.ToArray();
-                continue;
+                if (l.StartsWith("output:"))
+                {
+                    OutputFile = l.Split("output:")[1].Trim();
+                    continue;
+                }
+
+                if (l.StartsWith("fill:"))
+                {
+                    var ps = l.Split("fill:")[1];
+                    var p = ps.Split(",").Select(e => e.Trim());
+                    BlankColumns = p.ToArray();
+                    continue;
+                }
+
+                if (l.StartsWith("---"))
+                {
+                    header = false;
+                    continue;
+                }
             }
 
             if (l.StartsWith("#"))
@@ -57,6 +74,7 @@ public class Template
                 {
                     Commands[currentSheet] = currentCommands.ToArray();
                 }
+                currentCommands.Clear();
 
                 var match = _sheetNameRegex.Match(l);
                 currentSheet = match.Groups[1].Value.Trim();

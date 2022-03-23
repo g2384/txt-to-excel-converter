@@ -8,7 +8,7 @@ namespace Excel.Editor
     {
         public static void Main(params string[] files)
         {
-            if (files?.Any() != true)
+            if (files.Any() != true)
             {
                 files = new[]
                 {
