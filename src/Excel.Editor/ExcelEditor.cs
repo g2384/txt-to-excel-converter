@@ -160,6 +160,10 @@ public class ExcelEditor
         var cell = row.GetCell(currentCol) ?? row.CreateCell(currentCol);
         if (!string.IsNullOrWhiteSpace(text))
         {
+            if (text.StartsWith("-"))
+            {
+                text = "'" + text;
+            }
             cell.SetCellValue(text);
             Log.Information("added " + TrimText(text));
         }
