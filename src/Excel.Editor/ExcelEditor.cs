@@ -9,6 +9,7 @@ public class ExcelEditor
 {
     private static Regex cmdRegex = new Regex(@"(\w+-\w+):(.+)", RegexOptions.Compiled);
     private static Regex titleCmdRegex = new Regex(@"([^:]+):(.*)", RegexOptions.Compiled);
+    private static Regex commentRegex = new Regex(@"^//(.*)", RegexOptions.Compiled);
 
     public void Apply(Template template)
     {
@@ -31,6 +32,10 @@ public class ExcelEditor
                 var currentCmd = "";
                 foreach (var cmd in c.Value)
                 {
+                    if (commentRegex.IsMatch(cmd))
+                    {
+                        continue;
+                    }
                     if (useTitle)
                     {
                         var match = titleCmdRegex.Match(cmd);

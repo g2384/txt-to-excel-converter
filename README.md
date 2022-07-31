@@ -25,7 +25,7 @@ add-b: add to B3
 
 ### for settings
 
-|Command|Explaination|
+|Command|Explanation|
 |---|---|
 |`file`|file path of an excel file|
 |`output`|file path of the new excel file|
@@ -37,13 +37,13 @@ add-b: add to B3
 
 all parameters in this section can be appended to `params:` line.
 
-|Parameter|Explaination|
+|Parameter|Explanation|
 |---|---|
 |`use-title`|use title to select column index|
 
 ### for cells
 
-|Command|Explaination|
+|Command|Explanation|
 |---|---|
 |`#`, `##`|specify a sheet name|
 |`cell equals`|find row, column indices by comparing `cell == text`|
@@ -53,3 +53,9 @@ all parameters in this section can be appended to `params:` line.
 |`add-b`|move to the bottom cell, and add text|
 |`add-t`|move to the up cell, and add text|
 |`#comment`|all words after this are comments, will be ignored|
+
+### comments
+
+|Command|Explanation|
+|---|---|
+|`//`|the entire line is a comment. e.g. `// this is a comment`|
