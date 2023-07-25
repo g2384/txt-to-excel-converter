@@ -9,7 +9,7 @@ public class Template
     public Template(string file)
     {
         var lines = File.ReadAllLines(file);
-        var currentSheet = "";
+        var currentSheet = string.Empty;
         var currentCommands = new List<string>();
         var header = true;
         foreach (var line in lines)
@@ -30,7 +30,7 @@ public class Template
                     {
                         var fi = new FileInfo(file);
                         var path = fi.Directory;
-                        ExcelFile = Path.Combine(path.FullName, ExcelFile);
+                        ExcelFile = Path.Combine(path!.FullName, ExcelFile);
                     }
 
                     continue;
@@ -91,9 +91,9 @@ public class Template
         }
     }
 
-    public string ExcelFile { get; set; }
-    public string OutputFile { get; set; }
+    public string ExcelFile { get; set; } = string.Empty;
+    public string OutputFile { get; set; } = string.Empty;
     public bool UseTitle { get; set; }
-    public string[] BlankColumns { get; set; }
+    public string[] BlankColumns { get; set; } = Array.Empty<string>();
     public IDictionary<string, string[]> Commands { get; set; } = new Dictionary<string, string[]>();
 }

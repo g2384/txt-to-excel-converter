@@ -11,7 +11,8 @@ namespace Excel.Editor
             {
                 files = new[]
                 {
-                    "example.md"
+                    //"example.md"
+                    "CareerPlan.md"
                 };
             }
 
@@ -30,7 +31,7 @@ namespace Excel.Editor
                     continue;
                 }
 
-                Log.Information("Processing " + f);
+                Log.Information("Reading input file: " + f);
                 var template = new Template(f);
                 editor.Apply(template);
             }
